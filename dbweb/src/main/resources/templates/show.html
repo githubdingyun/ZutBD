@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+zhanshiyemian
+</body>
+<script src="jquery.min.js"></script>
+<script src="/echarts.min.js"></script>
+<div id="m1" style="width: 600px;height: 400px"></div>
+<script>
+    var my1 = echarts.init(document.getElementById("m1"))
+    var option1 = {
+        backgroundColor: '#2c343c',
+
+        title: {
+            text: 'Customized Pie',
+            left: 'center',
+            top: 20,
+            textStyle: {
+                color: '#ccc'
+            }
+        },
+
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+
+        visualMap: {
+            show: false,
+            min: 80,
+            max: 600,
+            inRange: {
+                colorLightness: [0, 1]
+            }
+        },
+        series: [
+            {
+                name: '栏目',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '50%'],
+                data: function () {
+                    var datas = [];//定义一个数组
+                    //获取内容
+                    $.ajax({
+                        type: 'get',
+                        url: 'getCategory_click.action',
+                        data: {
+                            "date": "20181126"
+                        },
+                        async: false,
+                        success: function (msg) {
+                            //msg
+                            /*
+                            {["rk":"20181126_0","num":2449]}
+                             */
+                            for (var i = 0; i < msg.length; i++) {
+                                datas.push({"value": msg[i].num, "name": msg[i].rk})
+                            }
+                        }
+                    });
+                    alert(datas);
+                    return datas;
+
+                }().sort(function (a, b) {
+                        return a.value - b.value;
+                    }),
+                roseType: 'radius',
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        },
+                        smooth: 0.2,
+                        length: 10,
+                        length2: 20
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#c23531',
+                        shadowBlur: 200,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                },
+
+                animationType: 'scale',
+                animationEasing: 'elasticOut',
+                animationDelay: function (idx) {
+                    return Math.random() * 200;
+                }
+            }
+        ]
+    };
+    my1.setOption(option1);
+</script>
+</html>
