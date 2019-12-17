@@ -1,2 +1,2 @@
 # ZutBD
-基于Hadoop+Storm的网络日志实时分析系统
+基于Hadoop框架的日志分析系统
